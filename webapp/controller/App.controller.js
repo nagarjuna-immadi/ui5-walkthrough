@@ -1,24 +1,18 @@
 sap.ui.define([
     "sap/ui/core/mvc/Controller",
-    "sap/m/MessageToast",
-    "sap/ui/model/json/JSONModel",
-], (Controller, MessageToast, JSONModel) => {
+    "sap/m/MessageToast"
+], (Controller, MessageToast) => {
     "use strict";
 
     return Controller.extend("ui5.walkthrough.controller.App", {
-        onInit() {
-            const oData = {
-                recipient: {
-                    name: "World",
-                },
-            };
-
-            const oModel = new JSONModel(oData);
-            console.log('oModel', oModel);
-            this.getView().setModel(oModel);
-        },
         onShowHello() {
-            MessageToast.show("Hello World");
+            // read msg from i18n model
+            const oBundle = this.getView().getModel("i18n").getResourceBundle();
+            const sRecipient = this.getView().getModel().getProperty("/recipient/name");
+            const sMsg = oBundle.getText("helloMsg", [sRecipient]);
+
+            // show message
+            MessageToast.show(sMsg);
         }
     });
 });
